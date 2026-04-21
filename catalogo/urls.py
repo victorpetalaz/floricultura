@@ -1,6 +1,4 @@
-from django.urls import path
-from . import views
-
 urlpatterns = [
     path('', views.storefront, name='storefront'),
+    path('profile/', views.profile, name='profile'),
 ]
