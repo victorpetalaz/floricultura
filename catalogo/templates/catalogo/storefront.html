@@ -9,31 +9,118 @@
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 1.5rem;
     }
+
     .card {
         background-color: var(--card-bg);
         border-radius: 8px;
         overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
         display: flex;
         flex-direction: column;
     }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
     .card-img {
         width: 100%;
         height: 250px;
         object-fit: cover;
+        background-color: #2D2D2D;
     }
-    .card-content { padding: 1.5rem; }
-    .card-price { color: var(--primary-blue); font-weight: bold; font-size: 1.2rem; }
+
+    .card-content {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .card-title {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.25rem;
+    }
+
+    .card-price {
+        color: var(--primary-blue);
+        font-weight: bold;
+        font-size: 1.5rem;
+        margin: 0;
+    }
+
+    .card-actions {
+        padding: 0 1.5rem 1.5rem 1.5rem;
+        margin-top: auto;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        background-color: var(--primary-blue);
+        color: white;
+        text-align: center;
+        padding: 0.75rem;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.2s;
+        border: none;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    .btn:hover {
+        background-color: var(--primary-hover);
+    }
+
+    .out-of-stock {
+        color: #EF4444;
+        font-weight: bold;
+        text-align: center;
+        margin: 0;
+        padding: 0.75rem 0;
+    }
 </style>
 
 <div class="grid">
     {% for flower in flowers %}
     <div class="card">
-        {% if flower.image %}<img src="{{ flower.image.url }}" class="card-img">{% endif %}
-        <div class="card-content">
-            <h3>{{ flower.name }}</h3>
-            <p class="card-price">$ {{ flower.price }}</p>
+        <a href="{% url 'flower_detail' flower.id %}" class="card-link">
+            {% if flower.image %}
+                <img src="{{ flower.image.url }}" alt="{{ flower.name }}" class="card-img">
+            {% else %}
+                <div class="card-img" style="display:flex; align-items:center; justify-content:center; color: var(--text-muted)">
+                    No image
+                </div>
+            {% endif %}
+            
+            <div class="card-content">
+                <h2 class="card-title">{{ flower.name }}</h2>
+                <p class="card-price">$ {{ flower.price }}</p>
+            </div>
+        </a>
+        
+        <div class="card-actions">
+            {% if flower.stock > 0 %}
+                <button class="btn">Add to Cart</button>
+            {% else %}
+                <p class="out-of-stock">Out of Stock</p>
+            {% endif %}
         </div>
     </div>
+    {% empty %}
+    <p style="text-align: center; width: 100%; color: var(--text-muted); grid-column: 1 / -1;">
+        No flowers available at the moment.
+    </p>
     {% endfor %}
 </div>
 {% endblock %}
