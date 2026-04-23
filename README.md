@@ -27,28 +27,26 @@ Projeto fullstack desenvolvido como parte de um processo seletivo para a vaga de
    git clone [https://github.com/SEU-USUARIO/floricultura.git](https://github.com/SEU-USUARIO/floricultura.git)
 
 2. Crie e ative o ambiente virtual:
-
 Bash
 python -m venv venv
 # No Windows:
 venv\Scripts\activate
 # No Linux/Mac:
 source venv/bin/activate
-3. Instale as dependências:
 
+3. Instale as dependências:
 Bash
 pip install -r requirements.txt
-4. Execute as migrações do banco de dados:
 
+4. Execute as migrações do banco de dados:
 Bash
 python manage.py migrate
-5. Crie um superusuário para acessar o sistema:
 
+5. Crie um superusuário para acessar o sistema:
 Bash
 python manage.py createsuperuser
 
 6. Inicie o servidor:
-
 Bash
 python manage.py runserver
 
