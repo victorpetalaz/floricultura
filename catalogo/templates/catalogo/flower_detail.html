@@ -3,93 +3,61 @@
 {% block title %}{{ flower.name }}{% endblock %}
 
 {% block content %}
-<style>
-    .detail-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 3rem;
-        background-color: var(--card-bg);
-        padding: 2.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-    .detail-image {
-        flex: 1;
-        min-width: 300px;
-    }
-    .detail-image img {
-        width: 100%;
-        border-radius: 8px;
-        object-fit: cover;
-    }
-    .detail-info {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-width: 300px;
-    }
-    .detail-price {
-        font-size: 2.5rem;
-        color: var(--primary-blue);
-        font-weight: bold;
-        margin: 1rem 0;
-    }
-    .btn-large {
-        background-color: var(--primary-blue);
-        color: white;
-        padding: 1rem;
-        border: none;
-        border-radius: 4px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-        margin-top: 2rem;
-        transition: background-color 0.2s;
-    }
-    .btn-large:hover {
-        background-color: var(--primary-hover);
-    }
-    .back-link {
-        display: inline-block;
-        margin-bottom: 1.5rem;
-        color: var(--text-muted);
-        text-decoration: none;
-    }
-    .back-link:hover {
-        color: var(--text-main);
-    }
-</style>
+<div class="mb-4">
+    <a href="{% url 'storefront' %}" class="text-decoration-none text-muted">&larr; Back to Store</a>
+</div>
 
-<a href="{% url 'storefront' %}" class="back-link">&larr; Back to Store</a>
-
-<div class="detail-container">
-    <div class="detail-image">
-        {% if flower.image %}
-            <img src="{{ flower.image.url }}" alt="{{ flower.name }}">
-        {% else %}
-            <div style="width:100%; height:400px; background-color:#2D2D2D; display:flex; align-items:center; justify-content:center; border-radius:8px; color: var(--text-muted);">
-                No image available
-            </div>
-        {% endif %}
-    </div>
-    
-    <div class="detail-info">
-        <h1 style="margin-top:0; font-size: 2.5rem;">{{ flower.name }}</h1>
-        <p style="color: var(--text-muted); font-size: 1.1rem;">Category: {{ flower.category.name }}</p>
+<div class="card shadow border-0 bg-dark text-light">
+    <div class="row g-0">
         
-        <p class="detail-price">$ {{ flower.price }}</p>
-        
-        <div style="margin-top: 1.5rem; line-height: 1.6;">
-            <p><strong>Availability:</strong> {% if flower.stock > 0 %}<span style="color: #10B981;">In Stock</span>{% else %}<span style="color: #EF4444;">Out of Stock</span>{% endif %}</p>
-            <p><strong>Stock count:</strong> {{ flower.stock }} units left</p>
+        <div class="col-md-6">
+            {% if flower.image %}
+                <img src="{{ flower.image.url }}" alt="{{ flower.name }}" class="img-fluid rounded-start w-100 h-100" style="object-fit: cover; min-height: 400px;">
+            {% else %}
+                <div class="bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center h-100 rounded-start" style="min-height: 400px;">
+                    <span class="text-muted fs-5">No image available</span>
+                </div>
+            {% endif %}
         </div>
         
+        <div class="col-md-6 d-flex flex-column">
+            <div class="card-body p-5 d-flex flex-column h-100">
+                
+                <h1 class="display-5 fw-bold mb-1">{{ flower.name }}</h1>
+                <p class="text-muted fs-5 mb-4">Category: {{ flower.category.name }}</p>
+                
+                <p class="display-6 text-primary fw-bold mb-4">$ {{ flower.price }}</p>
+                
+                <div class="mb-5 lh-lg">
+                    <p class="mb-1">
+                        <strong>Availability:</strong> 
+                        {% if flower.stock > 0 %}
+                            <span class="text-success fw-bold">In Stock</span>
+                        {% else %}
+                            <span class="text-danger fw-bold">Out of Stock</span>
+                        {% endif %}
+                    </p>
+                    <p class="mb-0"><strong>Stock count:</strong> {{ flower.stock }} units left</p>
+                </div>
+                
+                <div class="mt-auto">
+                    
+                    <div class="d-flex gap-2 mb-3">
+                        <a href="{% url 'flower_update' flower.id %}" class="btn btn-outline-light flex-grow-1">Edit Item</a>
+                        <a href="{% url 'flower_delete' flower.id %}" class="btn btn-outline-danger flex-grow-1">Delete</a>
+                    </div>
+
 {% if flower.stock > 0 %}
-            <form action="{% url 'test_add_to_cart' flower.id %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn-large" style="width: 100%;">Add to Cart</button>
-            </form>
-        {% endif %}
+                        <form action="{% url 'test_add_to_cart' flower.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Add to Cart</button>
+                        </form>
+                    {% else %}
+                        <button class="btn btn-secondary btn-lg w-100 fw-bold" disabled>Unavailable</button>
+                    {% endif %} </div>
+            </div>
+        </div>
+        
     </div>
 </div>
 {% endblock %}
